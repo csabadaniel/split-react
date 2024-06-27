@@ -1,7 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import {SplitFactoryProvider, SplitTreatments} from '@splitsoftware/splitio-react';
 
 function App() {
+
+  const sdkConfig = {
+    core: {
+      authorizationKey: process.env.REACT_APP_AUTH_TOKEN,
+      key: '1'
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +26,15 @@ function App() {
         >
           Learn React
         </a>
+        <SplitFactoryProvider config={sdkConfig}>
+          <SplitTreatments names={['hello-react']}>
+            {({treatments, isReady}) => {
+              return isReady ?
+                  treatments['hello-react'].treatment === 'on' ? 'Hello React!' : '' :
+                  '';
+            }}
+          </SplitTreatments>
+        </SplitFactoryProvider>
       </header>
     </div>
   );
